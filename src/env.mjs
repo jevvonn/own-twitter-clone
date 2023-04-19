@@ -23,6 +23,8 @@ const server = z.object({
   // DISCORD_CLIENT_SECRET: z.string(),
   GOOGLE_CLIENT_ID: z.string(),
   GOOGLE_CLIENT_SECRET: z.string(),
+  TWITTER_CLIENT_ID: z.string(),
+  TWITTER_CLIENT_SECRET: z.string(),
 });
 
 /**
@@ -46,6 +48,8 @@ const processEnv = {
   NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
+  TWITTER_CLIENT_ID: process.env.TWITTER_CLIENT_ID,
+  TWITTER_CLIENT_SECRET: process.env.TWITTER_CLIENT_SECRET,
   // DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID,
   // DISCORD_CLIENT_SECRET: process.env.DISCORD_CLIENT_SECRET,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
