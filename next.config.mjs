@@ -10,6 +10,9 @@ const config = {
   images: {
     domains: ["lh3.googleusercontent.com", "pbs.twimg.com"],
   },
+  experimental: {
+    scrollRestoration: true,
+  },
   /**
    * If you have `experimental: { appDir: true }` set, then you must comment the below `i18n` config
    * out.
