@@ -4,7 +4,6 @@ import {
   IconUser,
   IconBrandGoogle,
   IconLogout,
-  IconDots,
 } from "@tabler/icons-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
@@ -18,11 +17,11 @@ const LeftSide = () => {
 
   return (
     <>
-      <aside className="sticky top-0 flex h-screen w-1/4 flex-col gap-4 py-4">
-        <div className="btn w-max rounded-full border-none bg-transparent hover:bg-neutral">
+      <aside className="fixed bottom-0 z-30 flex w-full justify-center gap-4 border-t border-t-gray-500 bg-base-100 px-2 py-4 md:sticky md:top-0 md:h-screen md:w-1/4 md:flex-col md:justify-normal md:border-t-0">
+        <div className="btn hidden w-max rounded-full border-none bg-transparent hover:bg-neutral md:block">
           <IconBrandTwitterFilled size={30} />
         </div>
-        <div className="flex flex-col gap-2" style={{ flex: "1 1 0" }}>
+        <div className="flex gap-2 md:flex-col">
           <Link href="/" className={styleMainLink}>
             <IconHome size={30} />
             <span>Home</span>
@@ -36,26 +35,23 @@ const LeftSide = () => {
         </div>
         {!!session && (
           <div className="flex items-center gap-4 ">
-            <div className={styleMainLink}>
-              <div className="avatar">
-                <div className=" rounded-full">
-                  <Image
-                    src={session.user.image || ""}
-                    alt={session.user.name || ""}
-                    width={30}
-                    height={30}
-                  />
-                </div>
-              </div>
-              <div>{session.user?.name}</div>
-            </div>
-            <div className="dropdown-top dropdown-end dropdown">
+            <div className="dropdown-top dropdown-end dropdown ">
               <label tabIndex={0} className={styleMainLink}>
-                <IconDots size={30} />
+                <div className="avatar">
+                  <div className="rounded-full">
+                    <Image
+                      src={session.user.image || ""}
+                      alt={session.user.name || ""}
+                      width={30}
+                      height={30}
+                    />
+                  </div>
+                </div>
+                <div>{session.user?.name}</div>
               </label>
               <ul
                 tabIndex={0}
-                className="dropdown-content menu w-52 rounded-lg bg-base-200 p-2 shadow"
+                className="dropdown-content menu mb-2 w-52 rounded-lg bg-base-200 p-2 shadow"
               >
                 <li>
                   <button onClick={() => signOut()}>

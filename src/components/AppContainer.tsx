@@ -1,7 +1,6 @@
 import { ReactNode } from "react";
 import LeftSide from "./sides/LeftSide";
 import RightSide from "./sides/RightSide";
-import Header from "./Header";
 
 interface Props {
   children: ReactNode;
@@ -9,10 +8,12 @@ interface Props {
 
 const AppContainer = ({ children }: Props) => {
   return (
-    <div className="mx-10 flex">
+    <div className="flex md:mx-10">
       <LeftSide />
-      <div className="w-2/4 border-x-[1px] border-x-gray-500">{children}</div>
-      <RightSide />
+      <div className="w-full md:border-x-[1px] md:border-x-gray-500">
+        {children}
+      </div>
+      {/* <RightSide /> */}
     </div>
   );
 };

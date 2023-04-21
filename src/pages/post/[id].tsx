@@ -32,7 +32,9 @@ const PostPage: NextPage = () => {
         {post && <PostItem post={post} />}
         {session && post && <CommentForm postId={post.id} />}
         {post && post._count.comments === 0 && (
-          <div className="mt-5 text-center text-gray-500">No comments yet</div>
+          <div className="border-b border-b-gray-500 py-4 text-center text-gray-500">
+            No comments yet
+          </div>
         )}
         {comments && comments.length !== 0 && (
           <>
