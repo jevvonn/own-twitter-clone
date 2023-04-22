@@ -51,6 +51,19 @@ export const commentRouter = createTRPCRouter({
         },
       });
     }),
+  delete: protectedProcedure
+    .input(z.object({ commentId: z.string(), commentUserId: z.string() }))
+    .mutation(({ ctx, input }) => {
+      if (input.commentUserId === ctx.session.user.id) {
+        return ctx.prisma.comment.delete({
+          where: {
+            id: input.commentId,
+          },
+        });
+      }
+
+      throw new Error("You are not allowed to delete this comment");
+    }),
   like: protectedProcedure
     .input(z.object({ commentId: z.string(), isLiked: z.boolean() }))
     .mutation(({ ctx, input }) => {

@@ -1,8 +1,14 @@
-import { IconHeart, IconHeartFilled, IconMessage2 } from "@tabler/icons-react";
+import {
+  IconHeart,
+  IconHeartFilled,
+  IconMessage2,
+  IconTrash,
+} from "@tabler/icons-react";
 import { inferRouterOutputs } from "@trpc/server";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { toast } from "react-hot-toast";
 import { AppRouter } from "~/server/api/root";
 import { api } from "~/utils/api";
@@ -13,10 +19,21 @@ type Props = {
 
 const PostItem = ({ post }: Props) => {
   const ctx = api.useContext();
+  const router = useRouter();
   const { data: session } = useSession();
-  const { mutate } = api.post.like.useMutation({
+  const { mutate: mutateLikePost } = api.post.like.useMutation({
     onSuccess() {
       void ctx.post.invalidate();
+    },
+    onError(err) {
+      console.log(err);
+    },
+  });
+  const { mutate: mutateDeletePost } = api.post.delete.useMutation({
+    onSuccess() {
+      toast.success("Post deleted successfully");
+      void ctx.post.invalidate();
+      router.push("/");
     },
     onError(err) {
       console.log(err);
@@ -25,7 +42,7 @@ const PostItem = ({ post }: Props) => {
 
   const handleLike = () => {
     if (!session) return toast.error("Please login to like a post");
-    mutate({ postId: post.id, isLiked: !!post.likedBy?.length });
+    mutateLikePost({ postId: post.id, isLiked: !!post.likedBy?.length });
   };
 
   return (
@@ -69,6 +86,18 @@ const PostItem = ({ post }: Props) => {
                 {post._count.comments}
               </span>
             </Link>
+            {session && session.user.id === post.user.id && (
+              <button
+                onClick={() =>
+                  mutateDeletePost({
+                    postId: post.id,
+                    postUserId: post.user.id,
+                  })
+                }
+              >
+                <IconTrash />
+              </button>
+            )}
           </div>
         </div>
       </div>

@@ -61,6 +61,19 @@ export const postRouter = createTRPCRouter({
         },
       });
     }),
+  delete: protectedProcedure
+    .input(z.object({ postId: z.string(), postUserId: z.string() }))
+    .mutation(({ ctx, input }) => {
+      if (input.postUserId === ctx.session.user.id) {
+        return ctx.prisma.post.delete({
+          where: {
+            id: input.postId,
+          },
+        });
+      }
+
+      throw new Error("You can't delete this post");
+    }),
   create: protectedProcedure
     .input(
       z.object({

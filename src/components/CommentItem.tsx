@@ -1,3 +1,4 @@
+import { IconTrash } from "@tabler/icons-react";
 import { IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import { inferRouterOutputs } from "@trpc/server";
 import { useSession } from "next-auth/react";
@@ -13,9 +14,18 @@ type Props = {
 const CommentItem = ({ comment }: Props) => {
   const ctx = api.useContext();
   const { data: session } = useSession();
-  const { mutate } = api.comment.like.useMutation({
+  const { mutate: mutateLikeComment } = api.comment.like.useMutation({
     onSuccess() {
       void ctx.comment.invalidate();
+    },
+    onError(err) {
+      console.log(err);
+    },
+  });
+  const { mutate: mutateDeleteComment } = api.comment.delete.useMutation({
+    onSuccess() {
+      void ctx.comment.invalidate();
+      toast.success("Comment deleted successfully");
     },
     onError(err) {
       console.log(err);
@@ -24,7 +34,10 @@ const CommentItem = ({ comment }: Props) => {
 
   const handleLike = () => {
     if (!session) return toast.error("Please login to like a comment");
-    mutate({ commentId: comment.id, isLiked: !!comment.likedBy?.length });
+    mutateLikeComment({
+      commentId: comment.id,
+      isLiked: !!comment.likedBy?.length,
+    });
   };
 
   return (
@@ -58,6 +71,18 @@ const CommentItem = ({ comment }: Props) => {
                 {comment._count.likedBy}
               </span>
             </button>
+            {session && session.user.id === comment.user.id && (
+              <button
+                onClick={() =>
+                  mutateDeleteComment({
+                    commentId: comment.id,
+                    commentUserId: comment.user.id,
+                  })
+                }
+              >
+                <IconTrash />
+              </button>
+            )}
           </div>
         </div>
       </div>
