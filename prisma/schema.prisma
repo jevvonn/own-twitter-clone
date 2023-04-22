@@ -31,10 +31,10 @@ model Comment {
     content   String   @db.Text
 
     postId String
-    post   Post   @relation(fields: [postId], references: [id])
+    post   Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
 
     userId  String
-    user    User   @relation(fields: [userId], references: [id])
+    user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     likedBy User[] @relation("likedComments")
 
     @@index([postId])
